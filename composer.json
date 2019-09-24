@@ -1,0 +1,8 @@
+{
+  "autoload": {
+    "psr-4": {
+      "modules\\sample\\": "modules/sample/src/"
+    }
+  }
+}
+  
