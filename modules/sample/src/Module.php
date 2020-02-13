@@ -39,6 +39,10 @@ class Module extends \yii\base\Module
         if (Craft::$app->request->getIsCpRequest()) {
             $this->_bindCpEvents();
         }
+        
+        if (getenv('ENVIRONMENT') === 'dev' && !Craft::$app->getRequest()->getIsConsoleRequest()) {
+            Craft::$app->session->set('enableDebugToolbarForSite', true);
+        }
 
         Craft::info(
             'Sample module loaded',
