@@ -3,7 +3,6 @@
 namespace modules\sample;
 
 use craft\web\AssetBundle;
-use craft\web\assets\cp\CpAsset;
 
 class Bundle extends AssetBundle
 {
