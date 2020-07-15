@@ -4,18 +4,12 @@ namespace modules\sample;
 
 use Craft;
 use yii\base\Event;
-use craft\events\RegisterCpNavItemsEvent;
-use craft\web\twig\variables\Cp;
-use craft\web\View;
+use craft\web\twig\variables\CraftVariable;
 
+use modules\sample\services\Sample;
 use modules\sample\twigextensions\Extension;
-use modules\sample\services\CpNav;
-use modules\sample\Bundle;
 
-/**
- * Yii Module for setting up custom Twig functionality to keep templates streamlined
- */
-class Module extends \yii\base\Module
+class Module extends \viget\base\Module
 {
     public static $instance;
 
@@ -26,40 +20,32 @@ class Module extends \yii\base\Module
      */
     public function init()
     {
-        Craft::setAlias('@modules/sample', $this->getBasePath());
-        $this->controllerNamespace = 'modules\sample\controllers';
-
+        // Initialize all the viget base code
         parent::init();
+
+        // Store a static reference of this class
         self::$instance = $this;
 
+        // Set alias to this module
+        Craft::setAlias('@modules/sample', __DIR__);
+
+        // Update controller namspace
+        $this->controllerNamespace = 'modules\sample\controllers';
+
+        // Set components on the module
         $this->_setComponents();
 
+        // If this is a front-end request
         if (Craft::$app->request->getIsSiteRequest()) {
+            // Bind front-end events
             $this->_bindEvents();
 
+            // Register twig extension
             Craft::$app->view->registerTwigExtension(new Extension());
         }
-
-        if (Craft::$app->request->getIsCpRequest()) {
-            $this->_bindCpEvents();
-        }
-
-        // Always turn on the debug bar in dev environment
-        if (
-            getenv('ENVIRONMENT') === 'dev' &&
-            !Craft::$app->getRequest()->getIsConsoleRequest() &&
-            !Craft::$app->getRequest()->getIsAjax()
-        ) {
-            Craft::$app->session->set('enableDebugToolbarForSite', true);
-        }
-
-        Craft::info(
-            'Sample module loaded',
-            __METHOD__
-        );
     }
 
-    /**
+     /**
      * Set components (services) on the module
      *
      * @return void
@@ -67,64 +53,24 @@ class Module extends \yii\base\Module
     private function _setComponents()
     {
         $this->setComponents([
-            'cpNav' => CpNav::class,
+            'sample' => Sample::class,
         ]);
     }
 
     /**
-     * Bind actions onto Craft front-end events
+     * Bind front-end events
      *
      * @return void
      */
     private function _bindEvents()
     {
-        // Add edit entry link to front-end templates
+        // Now you can access the components and methods in twig with craft.sampleUtil
         Event::on(
-            View::class,
-            View::EVENT_END_BODY,
+            CraftVariable::class,
+            CraftVariable::EVENT_INIT,
             function(Event $e) {
-                $element = Craft::$app->getUrlManager()->getMatchedElement();
-                
-                if (!$element) return;
-
-                $currentUser = Craft::$app->getUser()->identity ?? null;
-
-                if (
-                    Craft::$app->config->general->devMode ||
-                    ($currentUser && $currentUser->can('accessCp'))
-                ) {
-                    $this->view->registerAssetBundle(Bundle::class);
-
-                    echo '<a
-                            href="' . $element->cpEditUrl . '"
-                            class="edit-entry"
-                            target="_blank"
-                            rel="noopener"
-                          >
-                            Edit Entry
-                          </a>';
-                }
-            }
-        );
-    }
-
-    /**
-     * Bind actions onto Craft CP events
-     *
-     * @return void
-     */
-    private function _bindCpEvents()
-    {
-        // If it's not devMode, don't modify nav
-        if (!Craft::$app->config->general->devMode) {
-            return;
-        }
-
-        Event::on(
-            Cp::class,
-            Cp::EVENT_REGISTER_CP_NAV_ITEMS,
-            function (RegisterCpNavItemsEvent $event) {
-                $event->navItems = $this->cpNav->addItems($event->navItems);
+                $variable = $e->sender;
+                $variable->set('sampleUtil', self::$instance);
             }
         );
     }

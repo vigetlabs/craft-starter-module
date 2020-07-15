@@ -1,6 +1,6 @@
 # Craft CMS Starter Module
 
-This module is the starting place for creating a [Craft CMS Module](https://docs.craftcms.com/v3/extend/module-guide.html).
+This module is the sample for creating a [Craft CMS Module](https://docs.craftcms.com/v3/extend/module-guide.html). This extends from the [Viget Base composer package](https://github.com/vigetlabs/craft-viget-base), so that functionality can be included on the site without having to duplicate it. Be sure to use the latest version of the package in your `composer.json`.
 
 ## Installation
 
@@ -10,67 +10,3 @@ This module is the starting place for creating a [Craft CMS Module](https://docs
 1. Merge your `./config/app.php` with the sample `./config/app.php` accounting for the namespace change
 1. Merge your `composer.json` with the sample `composer.json` accounting for the namspace change
 1. Run `composer dump-autoload -a`
-
-## Out of the box, the module includes:
-
-### Custom partial() Twig method
-
-The custom `partial()` Twig method as a shorthand for:
-
-```twig
-{% include 'path/to/file' ignore missing with {
-    key: 'value',
-} only %}
-```
-
-With this module enabled, you can do:
-
-```twig
-{{ partial('path/to/file', {
-    key: 'value',
-}) }}
-```
-
-### Customized CP Navigation
-
-When in `devMode`, we are customizing the Craft CP navigation via a `/config/dev.php` (which should be gitignored). By default, we are adding links to **Sections** and **Fields** (controlled by `useDefaults`), and the three most **recent entries**. You can add links by adding to `navItems`.
-
-Here's a full sample configuration:
-
-```php
-// /config/dev.php
-<?php
-
-return [
-    'useDefaults' => true,
-    'navItems' => [
-        0 => [
-            'url' => '#TODO',
-            'label' => 'Custom Thing',
-        ],
-    ],
-    'showRecentEntries' => 3,
-    'icon' => 'disabled',
-];
-```
-
-If you'd like to restore the stock Craft navigation, use:
-
-```php
-// /config/dev.php
-
-<?php
-
-return [
-    'useDefaults' => false,
-    'showRecentEntries' => false,
-];
-```
-
-### Always show debug bar in dev environment
-
-Regardless of logged-in state or permissions, the Craft Debug Bar will always be visible.
-
-### Front-end edit entry Links
-
-When visiting an element URL on the front-end, an edit entry link to edit that element in the CP will be present in the lower left hand corner. This will always be present in the dev environment regardless of logged-in stat or permissions. If you want to change the color of it, edit `resources/style.css`

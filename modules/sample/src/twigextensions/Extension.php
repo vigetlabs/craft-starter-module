@@ -5,7 +5,7 @@ namespace modules\sample\twigextensions;
 use Craft;
 use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
-use modules\sample\services\PartialLoader;
+use modules\sample\services\Sample;
 
 /**
  * Custom Twig Extensions
@@ -21,9 +21,8 @@ class Extension extends AbstractExtension
     {
         return [
             new TwigFunction(
-                'partial',
-                [PartialLoader::class, 'load'],
-                ['is_safe' => ['html']]
+                'testMethod',
+                [Sample::class, 'testMethod']
             ),
         ];
     }
