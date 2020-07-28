@@ -1,6 +1,6 @@
 {
   "require": {
-    "viget/craft-viget-base": "1.0.3"
+    "viget/craft-viget-base": "1.1.0"
   },
   "autoload": {
     "psr-4": {
