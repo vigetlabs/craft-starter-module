@@ -15,4 +15,4 @@ This module is the sample for creating a [Craft CMS Module](https://docs.craftcm
     AIRTABLE_API_KEY
     AIRTABLE_BASE
     ```
-    Using the base ID from the Craft Inventory Airtable
+    Using the base ID from the Craft Inventory Airtable and the API key from 1Password for the Viget Airtable account.
