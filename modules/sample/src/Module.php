@@ -9,7 +9,7 @@ use craft\web\twig\variables\CraftVariable;
 use modules\sample\services\Sample;
 use modules\sample\twigextensions\Extension;
 
-class Module extends \viget\base\Module
+class Module extends \yii\base\Module
 {
     public static $instance;
 
@@ -21,7 +21,13 @@ class Module extends \viget\base\Module
     public function init()
     {
         // Initialize all the viget base code
-        parent::init();
+        $this->setModules([
+            'viget-base' => [
+                'class' => '\viget\base\Module',
+            ],
+        ]);
+
+        ($this->getModule('viget-base'))->init();
 
         // Store a static reference of this class
         self::$instance = $this;
@@ -43,6 +49,8 @@ class Module extends \viget\base\Module
             // Register twig extension
             Craft::$app->view->registerTwigExtension(new Extension());
         }
+
+        parent::init();
     }
 
      /**
