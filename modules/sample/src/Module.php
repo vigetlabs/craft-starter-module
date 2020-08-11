@@ -27,7 +27,7 @@ class Module extends \yii\base\Module
             ],
         ]);
 
-        ($this->getModule('viget-base'))->init();
+        $this->getModule('viget-base');
 
         // Store a static reference of this class
         self::$instance = $this;
